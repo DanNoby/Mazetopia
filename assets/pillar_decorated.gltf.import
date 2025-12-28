@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://2drnomfpvy7k"
-path="res://.godot/imported/hex_rock_roadD_detail.gltf.glb-90ffdbf64fb5dbbe8d36ad7b084c5b4f.scn"
+uid="uid://bgysuei8c1j78"
+path="res://.godot/imported/pillar_decorated.gltf-f20be8f6498c49ba7b14b0efa90ef1ee.scn"
 
 [deps]
 
-source_file="res://assets/tiles/hex_rock_roadD_detail.gltf.glb"
-dest_files=["res://.godot/imported/hex_rock_roadD_detail.gltf.glb-90ffdbf64fb5dbbe8d36ad7b084c5b4f.scn"]
+source_file="res://assets/pillar_decorated.gltf"
+dest_files=["res://.godot/imported/pillar_decorated.gltf-f20be8f6498c49ba7b14b0efa90ef1ee.scn"]
 
 [params]
 
