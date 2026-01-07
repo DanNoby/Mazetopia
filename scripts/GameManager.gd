@@ -15,7 +15,6 @@ var current_hearts: int = 3
 func start_game(difficulty_mode):
 	current_difficulty = difficulty_mode
 	
-	# Set hearts based on mode
 	match current_difficulty:
 		Difficulty.EASY:
 			max_hearts = 3
@@ -25,7 +24,6 @@ func start_game(difficulty_mode):
 			max_hearts = 1
 	
 	current_hearts = max_hearts
-	# Reset the game scene
 	get_tree().reload_current_scene()
 
 func take_damage():
@@ -35,8 +33,7 @@ func take_damage():
 func heal(amount):
 	if current_hearts < max_hearts:
 		current_hearts += amount
-		
-		# Cap it so we don't go over the limit
+	
 		if current_hearts > max_hearts:
 			current_hearts = max_hearts
 			

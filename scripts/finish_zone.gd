@@ -7,5 +7,4 @@ func _on_body_entered(body):
 	if body.name == "Player":
 		if body.has_method("win"):
 			body.win()
-		# This is the line your debugger was missing!
 		GameManager.emit_signal("level_complete")

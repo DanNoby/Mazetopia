@@ -1,6 +1,6 @@
 extends StaticBody3D
 
-# --- TUNING KNOBS ---
+# Trapwall elements
 @export var safe_time: float = 2   # The "Window to Move" (Walls are DOWN)
 @export var warning_time: float = 1.5 # Reaction time (Spikes are PEEKING)
 @export var deadly_time: float = 1.0  # How long it blocks the path (Walls are UP)
@@ -9,15 +9,14 @@ var start_delay: float = 0.0
 @onready var kill_zone = $Area3D
 @onready var mesh = $MeshInstance3D
 
-var worm_scene = preload("res://scenes/worm.tscn") # Make sure path is right
+var worm_scene = preload("res://scenes/worm.tscn") 
 var powerup_scene = preload("res://scenes/powerup.tscn") 
 
 enum {SAFE, WARNING, DEADLY}
 var current_state = SAFE
 
 func _ready():
-	position.y = -3.0 # Start hidden
-	# Waiting for MazeContainer to call initialize()...
+	position.y = -3.0 
 
 func initialize(assigned_delay):
 	start_delay = assigned_delay
@@ -26,25 +25,24 @@ func initialize(assigned_delay):
 
 func start_trap_cycle():
 	while true:
-		# --- PHASE 1: SAFE (The Window to Move) ---
-		# This is the "walls go DOWN" moment you asked for.
+		# Safe phase
 		current_state = SAFE
 		var tween = create_tween()
 		tween.tween_property(self, "position:y", -3.0, 0.5) # Go down smooth
 		
 		var roll = randf()
 	
-	# 2% Chance for a Worm
+		# spawn chance for a Worm
 		if roll < 0.02:
 			spawn_worm()
 		
 		if roll > 0.75: 
 			spawn_powerup()
 		
-		# We wait here for the full "Safe Time"
+		# Waiting for the full Safe period
 		await get_tree().create_timer(safe_time).timeout
 		
-		# --- PHASE 2: WARNING (Spikes Peek) ---
+		# Spikes peeking phase
 		current_state = WARNING
 		tween = create_tween()
 		tween.tween_property(self, "position:y", -1.8, 0.2) # Spikes poke out
@@ -52,16 +50,14 @@ func start_trap_cycle():
 		# Give player time to react
 		await get_tree().create_timer(warning_time).timeout
 		
-		# --- PHASE 3: DEADLY (Wall Up) ---
+		# Wall up deadly phase
 		current_state = DEADLY
 		tween = create_tween()
 		tween.tween_property(self, "position:y", 0.0, 0.1) # Snap up fast
-		#if randf() < 0.00:  # Spawning the worms
-			#spawn_worm()
 			
 		check_for_player_kill()
 		
-		# Wall stays up for a bit (Blocking the path)
+		# walls blocking path
 		await get_tree().create_timer(deadly_time).timeout
 		
 func spawn_worm():
@@ -69,17 +65,15 @@ func spawn_worm():
 	get_tree().current_scene.add_child(worm)
 	worm.global_position = Vector3(global_position.x, 0.5, global_position.z)
 
-# NEW FUNCTION
 func spawn_powerup():
 	var powerup = powerup_scene.instantiate()
 	get_tree().current_scene.add_child(powerup)
-	# Spawn it slightly lower so it sits on the wall top
+	
 	powerup.global_position = global_position + Vector3(0, 1.2, 0)
 
 func check_for_player_kill():
 	var bodies = kill_zone.get_overlapping_bodies()
 	for body in bodies:
-		# Check if the body has the 'hit' function we just wrote
 		if body.has_method("hit"):
 			body.hit()
 

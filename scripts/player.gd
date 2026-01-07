@@ -3,12 +3,12 @@ extends CharacterBody3D
 const SPEED = 5.0
 const MOUSE_SENSITIVITY = 0.003
 
-# --- MODES ---
+# Modes 
 var is_fps_mode = false
 var is_invincible = false
 var is_attacking = false
 
-# --- NODES ---
+# Nodes
 @onready var mesh = $Knight
 @onready var sword_container = $Knight/Rig_Medium/Skeleton3D/BoneAttachment3D/sword
 @onready var sword_hitbox = $Knight/Rig_Medium/Skeleton3D/BoneAttachment3D/sword/swordhitbox
@@ -20,27 +20,23 @@ var is_attacking = false
 @onready var camera_fps = $Head/CameraFPS
 @onready var camera_tps = $CameraTPS 
 
-# --- SWORD CONFIGURATION (Tweak these in Inspector while playing!) ---
+# Sword Config
 @export var fps_sword_offset = Vector3(0, 0.5, 0.5)  
 @export var fps_sword_rotation = Vector3(45, 0, 0)
 @export var tps_sword_rot = Vector3.ZERO
 var tps_sword_pos = Vector3.ZERO 
 
 func _ready():
-	# Store the original position so we can reset it later
-	if sword_container:
-		tps_sword_pos = sword_container.position
-	else:
-		print("ERROR: Sword Container not found! Check path.")
-		
+	tps_sword_pos = sword_container.position
 	update_camera_mode()
 
 func _input(event):
 	if is_fps_mode and event is InputEventMouseMotion:
 		rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
-		head.rotate_x(event.relative.y * MOUSE_SENSITIVITY) # Removed negative sign (Fixes Inverted Look)
+		head.rotate_x(event.relative.y * MOUSE_SENSITIVITY) 
 		head.rotation.x = clamp(head.rotation.x, deg_to_rad(-90), deg_to_rad(90))
-
+	
+	# V to change view
 	if Input.is_action_just_pressed("change_view"): 
 		toggle_view_mode()
 
@@ -48,7 +44,7 @@ func _input(event):
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
-	# Click to recapture mouse (Only if alive!)
+	# Click to recapture mouse 
 	if Input.is_action_just_pressed("ui_accept"): 
 		if is_fps_mode and GameManager.current_hearts > 0: 
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -58,8 +54,7 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 		
-	# --- 1. FORCE SWORD POSITION (The "Live Tuner") ---
-	# We do this every frame to override the AnimationPlayer
+	# forcing sword pos for tuning to override the AnimationPlayer
 	if is_fps_mode and sword_container:
 		sword_container.position = tps_sword_pos + fps_sword_offset
 		sword_container.rotation_degrees = fps_sword_rotation
@@ -67,19 +62,19 @@ func _physics_process(delta):
 		sword_container.position = tps_sword_pos
 		sword_container.rotation = tps_sword_rot
 		
-	# --- ATTACK INPUT ---
+	# Attack
 	if Input.is_action_just_pressed("ui_accept") and not is_attacking:
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED or not is_fps_mode:
 			attack()
 	
-	# --- MOVEMENT ---
+	# movement
 	var input_dir = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var direction = Vector3.ZERO
 	
+	# FPS movement
 	if is_fps_mode:
-		# FPS Movement: Relative to camera
 		var raw_dir = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-		direction = -raw_dir # Negative because your model/camera likely faces -Z
+		direction = -raw_dir 
 	else:
 		# Top Down Movement: Absolute directions
 		direction = Vector3(input_dir.x, 0, input_dir.y).normalized()
@@ -109,12 +104,12 @@ func _physics_process(delta):
 	if global_position.y < -5.0:
 		die_instant()
 
-# --- CAMERA HELPERS ---
+# Camera helpers
 func toggle_view_mode():
 	if not is_fps_mode: 
 		# Entering FPS: Snap Body to match where Mesh was looking
 		rotation.y = mesh.rotation.y
-		mesh.rotation.y = deg_to_rad(0) # Reset mesh to face forward relative to root
+		mesh.rotation.y = deg_to_rad(0)
 		
 	is_fps_mode = not is_fps_mode
 	update_camera_mode()
@@ -133,7 +128,7 @@ func update_camera_mode():
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		toggle_body_parts(true)
 
-# --- VISIBILITY LOOPER ---
+# Visibility Looper
 func toggle_body_parts(show_full_body: bool):
 	if not skeleton: return
 	for child in skeleton.get_children():
@@ -151,7 +146,7 @@ func toggle_body_parts(show_full_body: bool):
 					child.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 					child.visible = true
 
-# --- ATTACK ---
+# Attack func
 func attack():
 	is_attacking = true
 	anim.play("Interact") 
@@ -160,7 +155,7 @@ func attack():
 	sword_hitbox.monitoring = false
 	is_attacking = false
 
-# --- HEALTH/DEATH ---
+# Health / death
 func hit():
 	if is_invincible: return
 	GameManager.take_damage()

@@ -6,7 +6,7 @@ extends Node3D
 @export var grid_height: int = 9
 
 @export_group("Tuning")
-@export var tile_spacing: float = 2.0  # Distance between centers (Keep 2.0 to match pillars)
+@export var tile_spacing: float = 2.0 
 @export var visual_scale: float = 0.9  # Scale multiplier
 
 var available_tiles: Array[PackedScene] = []
@@ -19,31 +19,25 @@ func _ready():
 
 func load_tiles_from_folder():
 	var dir = DirAccess.open(tiles_folder)
-	if dir:
-		dir.list_dir_begin()
-		var file_name = dir.get_next()
+	dir.list_dir_begin()
+	var file_name = dir.get_next()
+	
+	while file_name != "":
+		if !dir.current_is_dir() and !file_name.begins_with("."):
+			if file_name.ends_with(".glb") or file_name.ends_with(".tscn"):
+				
+				var full_path = tiles_folder + "/" + file_name
+				var tile_scene = load(full_path)
+				
+				if tile_scene:
+					available_tiles.append(tile_scene)
 		
-		while file_name != "":
-			# Ignore folders and hidden files (starting with .)
-			if !dir.current_is_dir() and !file_name.begins_with("."):
-				# Check for correct file types
-				if file_name.ends_with(".glb") or file_name.ends_with(".tscn"):
-					
-					var full_path = tiles_folder + "/" + file_name
-					var tile_scene = load(full_path)
-					
-					if tile_scene:
-						available_tiles.append(tile_scene)
-			
-			file_name = dir.get_next()
-		
-		# Close the directory stream (Good practice)
-		dir.list_dir_end()
-	else:
-		print("ERROR: Could not open folder: " + tiles_folder)
+		file_name = dir.get_next()
+	
+	dir.list_dir_end()
 
 func generate_floor():
-	# Calculate start position to center the grid
+	# Calculating start position to center the grid
 	var start_x = -((grid_width * tile_spacing) / 2.0) + (tile_spacing / 2.0)
 	var start_z = -((grid_height * tile_spacing) / 2.0) + (tile_spacing / 2.0)
 
