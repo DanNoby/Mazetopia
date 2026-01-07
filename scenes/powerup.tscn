@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://blr3ostlr54jt"]
 
-[ext_resource type="Script" uid="uid://ddqiyvk88cgvo" path="res://scenes/powerup.gd" id="1_ih772"]
+[ext_resource type="Script" uid="uid://ddqiyvk88cgvo" path="res://scripts/powerup.gd" id="1_ih772"]
 [ext_resource type="PackedScene" uid="uid://d12ufxm2gqj11" path="res://assets/mug_full.gltf" id="2_406cw"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_ih772"]

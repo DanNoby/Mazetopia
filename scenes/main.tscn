@@ -2,10 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://bqlcqcfgrddw1" path="res://scenes/player.tscn" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://wm881yxtmiiy" path="res://scenes/trapwall.tscn" id="2_0wfyh"]
-[ext_resource type="Script" uid="uid://bsstxq4x6bki7" path="res://scenes/maze_container.gd" id="3_jyhfs"]
+[ext_resource type="Script" uid="uid://bsstxq4x6bki7" path="res://scripts/maze_container.gd" id="3_jyhfs"]
 [ext_resource type="PackedScene" uid="uid://bmivyrra1ojhy" path="res://scenes/finishzone.tscn" id="3_sugp2"]
 [ext_resource type="PackedScene" uid="uid://gbtcxvrrd3e3" path="res://scenes/hud.tscn" id="5_tbgi4"]
-[ext_resource type="Script" uid="uid://bpnb7r6v6d6go" path="res://scenes/FloorGenerator.gd" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://bpnb7r6v6d6go" path="res://scripts/FloorGenerator.gd" id="6_tefeu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o5qli"]
 energy_multiplier = 0.1
