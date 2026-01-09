@@ -1,6 +1,6 @@
 # Dyanomaze
 
-![Main Image](/assets/main.png)
+![Main Image](assets/main.jpeg)
 
 A 3D arcade survival game built with the Godot Engine. This project combines precision platforming with melee combat, challenging players to navigate a maze of dynamically shifting pillars. Their journey is hammered with enemy ghosts and a spooky environment with ambient spotlight.
 
@@ -13,7 +13,7 @@ A 3D arcade survival game built with the Godot Engine. This project combines pre
 
 ![GIF: Gameplay showing the player manueuvring around pillars, while attacking enemies and collecting HP powerups](assets/gameplay_loop.gif)
 
-[GIF: Gameplay showing the player doing the same in FPS](assets/FPS_gameplay_loop.gif)
+![GIF: Gameplay showing the player doing the same in FPS](assets/FPS_gameplay_loop.gif)
 
 ## Controls
 
@@ -65,3 +65,11 @@ The Player script just sends signals (like "I died" or "I won") and lets the Man
     - `jump`/`accept`: mapped to **Space**
 
 - **Engine:** Godot 4.x
+
+## Things left to do
+
+1. Expand the territory and add border assets
+2. Color the different pillars
+3. Introduce different health modes
+4. Add another level to the existing platform
+5. Adding sound effects
